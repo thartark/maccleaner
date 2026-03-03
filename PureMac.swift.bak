@@ -193,9 +193,9 @@ class PureMacViewModel: ObservableObject {
             PerformanceItem(name: "Login Item Manager", description: "Show startup items", icon: "power", color: .orange, 
                           value: "View", action: "echo '🚀 LOGIN ITEMS:'; echo '=============='; osascript -e 'tell app \"System Events\" to get name of every login item' 2>/dev/null"),
             PerformanceItem(name: "Real-Time Monitor", description: "Live system stats", icon: "eye", color: .orange, 
-                          value: "Active", action: "echo '📊 SYSTEM STATS:'; echo '==============='; echo 'CPU: '$(ps -A -o %cpu | awk '{s+=$1} END {print s\"%\"}'); echo 'Memory: '$(vm_stat | grep free | awk '{print $3}' | sed 's/\.//')' pages free'; uptime"),
+                            value: "Active", action: "echo \"📊 SYSTEM STATS:\"; echo \"===============\"; echo \"CPU: \"$(ps -A -o %cpu | awk \"{s+=\$1} END {print s\"%\"}\"); echo \"Memory: \"$(vm_stat | awk \"/free/ {print \$3}\" | sed \"s/\\.//\")\" pages free\"; uptime"),
             PerformanceItem(name: "Thermal Monitor", description: "CPU temperature", icon: "thermometer", color: .orange, 
-                          value: "Check", action: "sudo powermetrics --samplers thermal -n1 2>/dev/null | grep 'CPU die temperature' || echo 'Thermal monitoring requires sudo'"),
+                            value: "Check", action: "sudo powermetrics --samplers thermal -n1 2>/dev/null | grep \"CPU die temperature\" || echo \"Thermal monitoring requires sudo\""),
             PerformanceItem(name: "Disk Health Check", description: "S.M.A.R.T. status", icon: "externaldrive", color: .orange, 
                           value: "Check", action: "diskutil info / | grep -E 'SMART|Health' || echo 'SMART status not available'"),
             PerformanceItem(name: "Swap Usage Monitor", description: "Check swap file", icon: "arrow.triangle.2.circlepath", color: .orange, 
@@ -437,6 +437,20 @@ class PureMacViewModel: ObservableObject {
         task.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         return String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "?"
+    }
+    // Added missing uninstallApp function
+    func uninstallApp(_ appName: String) {
+        print("Attempting to uninstall: \(appName)")
+        // Add actual uninstall logic here
+        let alert = NSAlert()
+        alert.messageText = "Uninstall \(appName)?"
+        alert.informativeText = "Are you sure you want to uninstall this app?"
+        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: "Uninstall")
+        if alert.runModal() == .alertSecondButtonReturn {
+            print("User confirmed uninstall")
+            // Add actual removal code here
+        }
     }
 }
 

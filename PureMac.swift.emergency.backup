@@ -438,6 +438,20 @@ class PureMacViewModel: ObservableObject {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         return String(data: data, encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "?"
     }
+    // Added missing uninstallApp function
+    func uninstallApp(_ appName: String) {
+        print("Attempting to uninstall: \(appName)")
+        // Add actual uninstall logic here
+        let alert = NSAlert()
+        alert.messageText = "Uninstall \(appName)?"
+        alert.informativeText = "Are you sure you want to uninstall this app?"
+        alert.addButton(withTitle: "Cancel")
+        alert.addButton(withTitle: "Uninstall")
+        if alert.runModal() == .alertSecondButtonReturn {
+            print("User confirmed uninstall")
+            // Add actual removal code here
+        }
+    }
 }
 
 // MARK: - Models
